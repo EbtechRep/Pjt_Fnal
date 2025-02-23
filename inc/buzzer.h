@@ -97,7 +97,7 @@
 #define NOTE_CS8 4435
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
-
+//----------------------------------------------------------------------------------------------------------------
 // Definição da estrutura para uma música
 typedef struct {
     const uint *notes;       // Array de notas
@@ -105,7 +105,7 @@ typedef struct {
     size_t num_notes;        // Número de notas
     int tempo;               // Tempo da música (BPM)
 } Music;
-
+//-------------------------------------------------------------------------------------------------------------------
 // Música do Mario
 const uint mario_notes[] = {
     NOTE_E5, NOTE_E5, REST, NOTE_E5, REST, NOTE_C5, NOTE_E5, REST,
@@ -132,66 +132,26 @@ const Music mario_music = {
 
 // Música do Zelda
 const uint zelda_notes[] = {
-    // NOTE_A4, NOTE_D5, NOTE_F5, NOTE_A5, NOTE_D6, NOTE_F6, NOTE_A6, NOTE_F6,
-    // NOTE_A6, NOTE_F6, NOTE_A6, NOTE_F6, NOTE_A6, NOTE_F6, NOTE_A6, NOTE_F6,
-    // NOTE_AS4, NOTE_F4, NOTE_F4, NOTE_AS4, NOTE_GS4, NOTE_FS4, NOTE_GS4,
-    // NOTE_AS4, NOTE_FS4, NOTE_FS4, NOTE_AS4, NOTE_A4, NOTE_G4, NOTE_A4,
-    // REST,
-    NOTE_AS4, NOTE_F4, NOTE_AS4, NOTE_AS4, NOTE_C5, NOTE_D5, NOTE_DS5,
-    NOTE_F5, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_FS5, NOTE_GS5,
-    NOTE_AS5, NOTE_AS5, NOTE_AS5, NOTE_GS5, NOTE_FS5,
-    NOTE_GS5, NOTE_FS5, NOTE_F5,
-    NOTE_DS5, NOTE_F5, NOTE_FS5, NOTE_F5, NOTE_DS5,
-    NOTE_CS5, NOTE_DS5, NOTE_F5, NOTE_DS5, NOTE_CS5,
-    NOTE_C5, NOTE_D5, NOTE_E5, NOTE_G5,
-    NOTE_F5, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4,
-    NOTE_AS4, NOTE_F4, NOTE_AS4, NOTE_AS4, NOTE_C5, NOTE_D5, NOTE_DS5,
-    NOTE_F5, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_FS5, NOTE_GS5,
-    NOTE_AS5, NOTE_CS6,
-    NOTE_C6, NOTE_A5, NOTE_F5,
-    NOTE_FS5, NOTE_AS5,
-    NOTE_A5, NOTE_F5,
-    NOTE_FS5, NOTE_AS5,
-    NOTE_A5, NOTE_F5, NOTE_D5,
-    NOTE_DS5, NOTE_FS5,
-    NOTE_F5, NOTE_CS5, NOTE_AS4,
-    NOTE_C5, NOTE_D5, NOTE_E5, NOTE_G5,
-    NOTE_F5, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4
+    NOTE_AS4, NOTE_F4, NOTE_AS4, NOTE_AS4, NOTE_C5, NOTE_D5, NOTE_DS5, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_FS5, NOTE_GS5, NOTE_AS5, NOTE_AS5, NOTE_AS5, NOTE_GS5, NOTE_FS5, NOTE_GS5, NOTE_FS5, NOTE_F5, NOTE_F5,
+    NOTE_DS5, NOTE_F5, NOTE_FS5, NOTE_F5, NOTE_DS5, NOTE_CS5, NOTE_DS5, NOTE_F5, NOTE_DS5, NOTE_CS5, NOTE_C5, NOTE_D5, NOTE_E5, NOTE_G5, NOTE_F5, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4,
+    NOTE_AS4, NOTE_F4, NOTE_AS4, NOTE_AS4, NOTE_C5, NOTE_D5, NOTE_DS5, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_FS5, NOTE_GS5, NOTE_AS5, NOTE_CS6, NOTE_C6, NOTE_A5, NOTE_F5, NOTE_FS5, NOTE_AS5, NOTE_A5, NOTE_F5,
+    NOTE_FS5, NOTE_AS5, NOTE_A5, NOTE_F5, NOTE_D5, NOTE_DS5, NOTE_FS5, NOTE_F5, NOTE_CS5, NOTE_AS4, NOTE_C5, NOTE_D5, NOTE_E5, NOTE_G5, NOTE_F5, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4,
+    NOTE_F4, NOTE_F4
 };
 
 const uint zelda_durations[] = {
-    // 4, 4, 4, 4, 4, 4, 4, 4,
-    // 4, 4, 4, 4, 4, 4, 4, 4,
-    // -2, 8, 8, 8, 16, 16, -2,
-    // -2, 8, 8, 8, 16, 16, -2,
-    // 1,
-    4, -4, 8, 16, 16, 16, 16,
-    2, 8, 8, 8, 16, 16,
-    -2, 8, 8, 8, 16,
-    -8, 16, 2, 4,
-    -8, 16, 2, 8, 8,
-    -8, 16, 2, 8, 8,
-    -8, 16, 2, 8,
-    16, 16, 16, 16, 16, 16, 16, 16, 8, 16, 8,
-    4, -4, 8, 16, 16, 16, 16,
-    2, 8, 8, 8, 16, 16,
-    -2, 4,
-    4, 2, 4,
-    -2, 4,
-    4, 2, 4,
-    -2, 4,
-    4, 2, 4,
-    -2, 4,
-    4, 2, 4,
-    -8, 16, 2, 8,
-    16, 16, 16, 16, 16, 16, 16, 16, 8, 16, 8
+    4, -4, 8, 16, 16, 16, 2, 8, 8, 8, 8, 16, 16, -2, 8, 8, 8, 16, -8, 16, 2, 4,
+-8, 16, 2, 8, 8, -8, 16, 2, 8, 8, -8, 16, 16, 16, 16, 16, 16, 16, 16, 8, 16, 8,
+4, -4, 8, 16, 16, 16, 2, 8, 8, 8, 16, 16, -2, 4, 4, 2, 4, -2, 4, 4, 2, 4,
+-2, 4, 4, 2, 4, 4, 2, 4, 4, 2, 8, 16, 2, 8, 16, 16, 16, 16, 16, 16, 16, 16, 8
+
 };
 
 const Music zelda_music = {
     .notes = zelda_notes,
     .durations = zelda_durations,
     .num_notes = sizeof(zelda_notes) / sizeof(zelda_notes[0]),
-    .tempo = 88 // BPM do Zelda
+    .tempo = 100 // BPM do Zelda
 };
 
 // Música do Harry Potter
@@ -247,34 +207,104 @@ const Music sonic_music = {
     .notes = sonic_notes,
     .durations = sonic_durations,
     .num_notes = sizeof(sonic_notes) / sizeof(sonic_notes[0]),
-    .tempo = 90 // BPM do Sonic
+    .tempo = 144 // BPM do Sonic
 };
 
 // Música do Game of Thrones
 const uint got_notes[] = {
-    NOTE_AS4, NOTE_F4, NOTE_F4, NOTE_AS4,
-NOTE_GS4, NOTE_FS4, NOTE_GS4,
-NOTE_AS4, NOTE_FS4, NOTE_FS4, NOTE_AS4,
-NOTE_A4, NOTE_G4, NOTE_A4,
-REST,
-
-NOTE_AS4, NOTE_F4, NOTE_AS4, NOTE_AS4, NOTE_C5, NOTE_D5, NOTE_DS5,
-NOTE_F5, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_FS5, NOTE_GS5,
-NOTE_AS5, NOTE_AS5, NOTE_AS5, NOTE_GS5, NOTE_FS5,
-NOTE_GS5, NOTE_FS5, NOTE_F5, NOTE_F5
+    NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
+    NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
+    NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4,
+    NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_E4, NOTE_F4,
+    NOTE_G4, NOTE_C4,
+    
+    NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
+    NOTE_D4,
+    NOTE_F4, NOTE_AS3,
+    NOTE_DS4, NOTE_D4, NOTE_F4, NOTE_AS3,
+    NOTE_DS4, NOTE_D4, NOTE_C4,
+    
+    NOTE_G4, NOTE_C4,
+    
+    NOTE_DS4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_DS4, NOTE_F4,
+    NOTE_D4,
+    NOTE_F4, NOTE_AS3,
+    NOTE_DS4, NOTE_D4, NOTE_F4, NOTE_AS3,
+    NOTE_DS4, NOTE_D4, NOTE_C4,
+    NOTE_G4, NOTE_C4,
+    NOTE_DS4, NOTE_F4, NOTE_G4,  NOTE_C4, NOTE_DS4, NOTE_F4,
+    
+    NOTE_D4,
+    NOTE_F4, NOTE_AS3,
+    NOTE_D4, NOTE_DS4, NOTE_D4, NOTE_AS3,
+    NOTE_C4,
+    NOTE_C5,
+    NOTE_AS4,
+    NOTE_C4,
+    NOTE_G4,
+    NOTE_DS4,
+    NOTE_DS4, NOTE_F4,
+    NOTE_G4,
+    
+    NOTE_C5,
+    NOTE_AS4,
+    NOTE_C4,
+    NOTE_G4,
+    NOTE_DS4,
+    NOTE_DS4, NOTE_D4,
+    NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4, NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4,
+    NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4, NOTE_C5, NOTE_G4, NOTE_GS4, NOTE_AS4,
+    
+    REST, NOTE_GS5, NOTE_AS5, NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5,
+    NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5, NOTE_C6, NOTE_G5, NOTE_GS5, NOTE_AS5
 };
 
 const uint got_durations[] = {
-    -2, 8, 8, 8,
-16, 16, -2,
--2, 8, 8, 8,
-16, 16, -2,
-1,
-
-4, -4, 8, 16, 16, 16, 16,
-2, 8, 8, 8, 16, 16,
--2, 8, 8, 8, 16,
--8, 16, 2, 4
+    8, 8, 16, 16, 8, 8, 16, 16,
+    8, 8, 16, 16, 8, 8, 16, 16,
+    8, 8, 16, 16, 8, 8, 16, 16,
+    8, 8, 16, 16, 8, 8, 16, 16,
+    4, 4,
+    
+    16, 16, 4, 4, 16, 16,
+    1,
+    4, 4,
+    16, 16, 4, 4,
+    16, 16, 1,
+    
+    4, 4,
+    
+    16, 16, 4, 4, 16, 16,
+    1,
+    4, 4,
+    16, 16, 4, 4,
+    16, 16, 1,
+    4, 4,
+    16, 16, 4, 4, 16, 16,
+    
+    2,
+    4, 4,
+    8, 8, 8, 8,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    4, 4,
+    1,
+    
+    2,
+    2,
+    2,
+    2,
+    2,
+    4, 4,
+    8, 8, 16, 16, 8, 8, 16, 16,
+    8, 8, 16, 16, 8, 8, 16, 16,
+    
+    4, 16, 16, 8, 8, 16, 16,
+    8, 16, 16, 16, 8, 8, 16, 16
 };
 
 const Music got_music = {
@@ -299,6 +329,195 @@ const Music undertale_music = {
     .num_notes = sizeof(undertale_notes) / sizeof(undertale_notes[0]),
     .tempo = 120 // BPM 
 };
+
+// Música do Piratas do caribe
+const uint pirates_notes[] = {
+    NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
+  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
+  NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST,
+  NOTE_A4, NOTE_G4, NOTE_A4, REST,
+  
+  NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
+  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
+  NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST,
+  NOTE_A4, NOTE_G4, NOTE_A4, REST,
+  
+  NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
+  NOTE_A4, NOTE_C5, NOTE_D5, NOTE_D5, REST,
+  NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, REST,
+  NOTE_E5, NOTE_D5, NOTE_E5, NOTE_A4, REST,
+  
+  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
+  NOTE_D5, NOTE_E5, NOTE_A4, REST,
+  NOTE_A4, NOTE_C5, NOTE_B4, NOTE_B4, REST,
+  NOTE_C5, NOTE_A4, NOTE_B4, REST,
+  
+  NOTE_A4, NOTE_A4,
+  //Repeat of first part
+  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
+  NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST,
+  NOTE_A4, NOTE_G4, NOTE_A4, REST,
+  
+  NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
+  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
+  NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, REST,
+  NOTE_A4, NOTE_G4, NOTE_A4, REST,
+  
+  NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, REST,
+  NOTE_A4, NOTE_C5, NOTE_D5, NOTE_D5, REST,
+  NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, REST,
+  NOTE_E5, NOTE_D5, NOTE_E5, NOTE_A4, REST,
+  
+  NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, REST,
+  NOTE_D5, NOTE_E5, NOTE_A4, REST,
+  NOTE_A4, NOTE_C5, NOTE_B4, NOTE_B4, REST,
+  NOTE_C5, NOTE_A4, NOTE_B4, REST,
+  //End of Repeat
+  
+  NOTE_E5, REST, REST, NOTE_F5, REST, REST,
+  NOTE_E5, NOTE_E5, REST, NOTE_G5, REST, NOTE_E5, NOTE_D5, REST, REST,
+  NOTE_D5, REST, REST, NOTE_C5, REST, REST,
+  NOTE_B4, NOTE_C5, REST, NOTE_B4, REST, NOTE_A4,
+  
+  NOTE_E5, REST, REST, NOTE_F5, REST, REST,
+  NOTE_E5, NOTE_E5, REST, NOTE_G5, REST, NOTE_E5, NOTE_D5, REST, REST,
+  NOTE_D5, REST, REST, NOTE_C5, REST, REST,
+  NOTE_B4, NOTE_C5, REST, NOTE_B4, REST, NOTE_A4
+ };
+ 
+ const uint pirates_durations[] = {
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8,
+    
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8,
+    
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 8, 4, 8,
+    
+    8, 8, 4, 8, 8,
+    4, 8, 4, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 4,
+    
+    4, 8,
+    //Repeat of First Part
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8,
+    
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8,
+    
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 8, 4, 8,
+    
+    8, 8, 4, 8, 8,
+    4, 8, 4, 8,
+    8, 8, 4, 8, 8,
+    8, 8, 4, 4,
+    //End of Repeat
+    
+    4, 8, 4, 4, 8, 4,
+    8, 8, 8, 8, 8, 8, 8, 8, 4,
+    4, 8, 4, 4, 8, 4,
+    8, 8, 8, 8, 8, 2,
+    
+    4, 8, 4, 4, 8, 4,
+    8, 8, 8, 8, 8, 8, 8, 8, 4,
+    4, 8, 4, 4, 8, 4,
+    8, 8, 8, 8, 8, 2
+ };
+ 
+ const Music pirates_music = {
+     .notes = pirates_notes,
+     .durations = pirates_durations,
+     .num_notes = sizeof(pirates_notes) / sizeof(pirates_notes[0]),
+     .tempo = 120 // BPM 
+ };
+ 
+ // Música do tetris
+const uint tetris_notes[] = {
+    NOTE_E5, NOTE_B4, NOTE_C5, NOTE_D5, NOTE_C5, NOTE_B4,
+  NOTE_A4, NOTE_A4, NOTE_C5, NOTE_E5, NOTE_D5, NOTE_C5,
+  NOTE_B4, NOTE_C5, NOTE_D5, NOTE_E5,
+  NOTE_C5, NOTE_A4, NOTE_A4, NOTE_A4, NOTE_B4, NOTE_C5,
+  
+  NOTE_D5, NOTE_F5, NOTE_A5, NOTE_G5, NOTE_F5,
+  NOTE_E5, NOTE_C5, NOTE_E5, NOTE_D5, NOTE_C5,
+  NOTE_B4, NOTE_B4, NOTE_C5, NOTE_D5, NOTE_E5,
+  NOTE_C5, NOTE_A4, NOTE_A4, REST, 
+  
+  NOTE_E5, NOTE_B4, NOTE_C5, NOTE_D5, NOTE_C5, NOTE_B4,
+  NOTE_A4, NOTE_A4, NOTE_C5, NOTE_E5, NOTE_D5, NOTE_C5,
+  NOTE_B4, NOTE_C5, NOTE_D5, NOTE_E5,
+  NOTE_C5, NOTE_A4, NOTE_A4, NOTE_A4, NOTE_B4, NOTE_C5,
+  
+  NOTE_D5, NOTE_F5, NOTE_A5, NOTE_G5, NOTE_F5,
+  NOTE_E5, NOTE_C5, NOTE_E5, NOTE_D5, NOTE_C5,
+  NOTE_B4, NOTE_B4, NOTE_C5, NOTE_D5, NOTE_E5,
+  NOTE_C5, NOTE_A4, NOTE_A4, REST, 
+  
+  NOTE_E5, NOTE_C5,
+  NOTE_D5, NOTE_B4,
+  NOTE_C5, NOTE_A4,
+  NOTE_GS4, NOTE_B4, REST, 
+  NOTE_E5, NOTE_C5,
+  NOTE_D5, NOTE_B4,
+  NOTE_C5, NOTE_E5, NOTE_A5,
+  NOTE_GS5
+ };
+ 
+ const uint tetris_durations[] = {
+    4, 8, 8, 4, 8, 8,
+  4, 8, 8, 4, 8, 8,
+  4, 8, 4, 4,
+  4, 4, 8, 4, 8, 8,
+  
+  4, 8, 4, 8, 8,
+  4, 8, 4, 8, 8,
+  4, 8, 8, 4, 4,
+  4, 4, 4, 4,
+  
+  4, 8, 8, 4, 8, 8,
+  4, 8, 8, 4, 8, 8,
+  4, 8, 4, 4,
+  4, 4, 8, 4, 8, 8,
+  
+  4, 8, 4, 8, 8,
+  4, 8, 4, 8, 8,
+  4, 8, 8, 4, 4,
+  4, 4, 4, 4,
+  
+  2, 2,
+  2, 2,
+  2, 2,
+  2, 4, 8, 
+  2, 2,
+  2, 2,
+  4, 4, 2,
+  2
+ };
+ 
+ const Music tetris_music = {
+    .notes = tetris_notes,
+     .durations = tetris_durations,
+     .num_notes = sizeof(tetris_notes) / sizeof(tetris_notes[0]),
+     .tempo = 144 // BPM 
+ };
+
+
+//-------------------------------------------------------------------------------------------------------------
 // Funções
 void play_music(const Music *music);
 void play_sound(uint frequency, uint duration_ms);

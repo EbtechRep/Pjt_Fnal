@@ -140,13 +140,17 @@ int main() {
                     play_music(&mario_music);  // Toca a música do Mario
                     display_state_a = 1; // Próximo estado
                 } else if (display_state_a == 1) {
+                    ssd1306_draw_bitmap(&ssd_bm, tetris);
+                    play_music(&tetris_music);  // Toca a música do tetris
+                    display_state_a = 3; // Próximo estado
+                } else if (display_state_a == 3) {
                     ssd1306_draw_bitmap(&ssd_bm, zelda);
                     play_music(&zelda_music);  // Toca a música do Zelda
-                    display_state_a = 2; // Próximo estado
-                } else if (display_state_a == 2) {
+                    display_state_a = 4; // Próximo estado
+                } else if (display_state_a == 4) {
                     ssd1306_draw_bitmap(&ssd_bm, undertale);
                     play_music(&undertale_music);  // Toca a música do Undertale
-                    display_state_a = 3; // Próximo estado
+                    display_state_a = 5; // Próximo estado
                 } else {
                     ssd1306_draw_bitmap(&ssd_bm, sonic);
                     play_music(&sonic_music);  // Toca a música do Sonic
@@ -162,6 +166,10 @@ int main() {
                     ssd1306_draw_bitmap(&ssd_bm, harry);
                     play_music(&harry_music);  // Toca a música do Harry Potter
                     display_state_b = 1; // Próximo estado
+                } else if (display_state_b == 1) {
+                    ssd1306_draw_bitmap(&ssd_bm, pirates);
+                    play_music(&pirates_music);  // Toca a música do pirates
+                    display_state_b = 2; // Próximo estado
                 } else {
                     ssd1306_draw_bitmap(&ssd_bm, got);
                     play_music(&got_music);  // Toca a música do Game of Thrones
