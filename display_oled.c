@@ -39,7 +39,17 @@ void play_music(const Music *music) {
             return;
         }
 
-        int noteDuration = wholenote / music->durations[i]; // Calcula a duração da nota
+        int divider = music->durations[i];
+        int noteDuration;
+
+        if (divider > 0) {
+            // Nota regular
+            noteDuration = wholenote / divider;
+        } else if (divider < 0) {
+            // Nota pontuada (aumenta a duração em 50%)
+            noteDuration = (wholenote / abs(divider)) * 1.5;
+        }
+
         if (music->notes[i] != REST) {
             play_sound(music->notes[i], noteDuration * 0.9); // Toca a nota por 90% da duração
         }
