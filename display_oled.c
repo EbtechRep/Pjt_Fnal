@@ -9,6 +9,10 @@
 #include "inc/animation.h"
 #include "inc/buzzer.h"
 
+
+volatile uint8_t display_state_a = 0; // Estado para o botão A
+volatile uint8_t display_state_b = 0; // Estado para o botão B
+
 const uint I2C_SDA = 14;
 const uint I2C_SCL = 15;
 const uint BUTTON_A_PIN = 5; // Botão A no GPIO 5
@@ -22,20 +26,26 @@ volatile bool button_pressed = false;
 volatile uint8_t display_state = 0; // Estado para alternar entre displays no mesmo botão
 
 // Função para tocar uma música
-void play_music(const uint* notes, const uint* durations, size_t num_notes) {
+void play_music(const Music *music) {
     music_playing = true;
-    for (size_t i = 0; i < num_notes; i++) {
+
+    // Calcula a duração de uma semibreve (nota inteira) em ms
+    int wholenote = (60000 * 4) / music->tempo;
+
+    for (size_t i = 0; i < music->num_notes; i++) {
         if (change_display) {
             change_display = false;
             music_playing = false;
             return;
         }
-        if (notes[i] != REST) {
-            play_sound(notes[i], durations[i]);
-        } else {
-            sleep_ms(durations[i]); // Pausa
+
+        int noteDuration = wholenote / music->durations[i]; // Calcula a duração da nota
+        if (music->notes[i] != REST) {
+            play_sound(music->notes[i], noteDuration * 0.9); // Toca a nota por 90% da duração
         }
+        sleep_ms(noteDuration * 0.1); // Pausa de 10% da duração
     }
+
     music_playing = false;
 }
 
@@ -61,8 +71,7 @@ void button_callback(uint gpio, uint32_t events) {
     }
 }
 
-int main()
-{
+int main() {
     stdio_init_all(); // Inicializa os tipos stdio padrão presentes ligados ao binário
 
     // Configuração dos pinos dos botões como entrada com pull-up
@@ -110,55 +119,57 @@ int main()
     };
 
     int y = 0;
-    for (uint i = 0; i < count_of(text); i++)
-    {
+    for (uint i = 0; i < count_of(text); i++) {
         ssd1306_draw_string(ssd, 5, y, text[i]);
         y += 8;
     }
     render_on_display(ssd, &frame_area);
 
     while (true) {
-		if (button_pressed) {
-			button_pressed = false; // Reseta o flag do botão
-	
-			if (gpio_get(BUTTON_A_PIN) == 0) {
-				ssd1306_t ssd_bm;
-				ssd1306_init_bm(&ssd_bm, 128, 64, false, 0x3C, i2c1);
-				ssd1306_config(&ssd_bm);
-	
-				// Alterna entre os displays ao pressionar o botão A
-				if (display_state == 0) {
-					ssd1306_draw_bitmap(&ssd_bm, mario);
-					play_music(mario_notes, mario_durations, sizeof(mario_notes) / sizeof(mario_notes[0]));
-					display_state = 1; // Próximo estado
-				} else if (display_state == 1) {
-					ssd1306_draw_bitmap(&ssd_bm, zelda);
-					play_music(zelda_notes, zelda_durations, sizeof(zelda_notes) / sizeof(zelda_notes[0]));
-					display_state = 2; // Próximo estado
-				} else {
-					ssd1306_draw_bitmap(&ssd_bm, sonic);
-					play_music(sonic_notes, sonic_durations, sizeof(sonic_notes) / sizeof(sonic_notes[0]));
-					display_state = 0; // Volta ao estado inicial
-				}
-			}
-			else if (gpio_get(BUTTON_B_PIN) == 0) {
-				ssd1306_t ssd_bm;
-				ssd1306_init_bm(&ssd_bm, 128, 64, false, 0x3C, i2c1);
-				ssd1306_config(&ssd_bm);
-	
-				// Alterna entre Harry Potter e Sonic no botão B
-				if (display_state == 0) {
-					ssd1306_draw_bitmap(&ssd_bm, harry);
-					play_music(harry_notes, harry_durations, sizeof(harry_notes) / sizeof(harry_notes[0]));
-					display_state = 1; // Próximo estado
-				} else {
-					ssd1306_draw_bitmap(&ssd_bm, sonic);
-					play_music(sonic_notes, sonic_durations, sizeof(sonic_notes) / sizeof(sonic_notes[0]));
-					display_state = 0; // Volta ao estado inicial
-				}
-			}
-		}
-	}
+        if (button_pressed) {
+            button_pressed = false; // Reseta o flag do botão
+    
+            if (gpio_get(BUTTON_A_PIN) == 0) {
+                ssd1306_t ssd_bm;
+                ssd1306_init_bm(&ssd_bm, 128, 64, false, 0x3C, i2c1);
+                ssd1306_config(&ssd_bm);
+    
+                // Alterna entre os displays ao pressionar o botão A
+                if (display_state_a == 0) {
+                    ssd1306_draw_bitmap(&ssd_bm, mario);
+                    play_music(&mario_music);  // Toca a música do Mario
+                    display_state_a = 1; // Próximo estado
+                } else if (display_state_a == 1) {
+                    ssd1306_draw_bitmap(&ssd_bm, zelda);
+                    play_music(&zelda_music);  // Toca a música do Zelda
+                    display_state_a = 2; // Próximo estado
+                } else if (display_state_a == 2) {
+                    ssd1306_draw_bitmap(&ssd_bm, undertale);
+                    play_music(&undertale_music);  // Toca a música do Undertale
+                    display_state_a = 3; // Próximo estado
+                } else {
+                    ssd1306_draw_bitmap(&ssd_bm, sonic);
+                    play_music(&sonic_music);  // Toca a música do Sonic
+                    display_state_a = 0; // Volta ao estado inicial
+                }
+            } else if (gpio_get(BUTTON_B_PIN) == 0) {
+                ssd1306_t ssd_bm;
+                ssd1306_init_bm(&ssd_bm, 128, 64, false, 0x3C, i2c1);
+                ssd1306_config(&ssd_bm);
+    
+                // Alterna entre Series e Animes
+                if (display_state_b == 0) {
+                    ssd1306_draw_bitmap(&ssd_bm, harry);
+                    play_music(&harry_music);  // Toca a música do Harry Potter
+                    display_state_b = 1; // Próximo estado
+                } else {
+                    ssd1306_draw_bitmap(&ssd_bm, got);
+                    play_music(&got_music);  // Toca a música do Game of Thrones
+                    display_state_b = 0; // Volta ao estado inicial
+                }
+            }
+        }
+    }
 
     return 0;
 }

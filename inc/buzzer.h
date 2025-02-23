@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
-//@brief teste*
+
 // Definição das notas musicais
 #define REST 0
 #define NOTE_B0  31
@@ -98,6 +98,14 @@
 #define NOTE_D8  4699
 #define NOTE_DS8 4978
 
+// Definição da estrutura para uma música
+typedef struct {
+    const uint *notes;       // Array de notas
+    const uint *durations;   // Array de durações
+    size_t num_notes;        // Número de notas
+    int tempo;               // Tempo da música (BPM)
+} Music;
+
 // Música do Mario
 const uint mario_notes[] = {
     NOTE_E5, NOTE_E5, REST, NOTE_E5, REST, NOTE_C5, NOTE_E5, REST,
@@ -108,22 +116,82 @@ const uint mario_notes[] = {
 };
 
 const uint mario_durations[] = {
-    200, 200, 200, 200, 200, 200, 200, 200,
-    400, 200, 200, 400, 200, 200, 400, 200,
-    400, 200, 400, 200, 400, 200, 400, 200,
-    200, 200, 200, 200, 200, 200, 200, 200,
-    200, 200, 200, 200, 200, 200, 200, 200, 200
+    8, 8, 8, 8, 8, 8, 8, 8,
+    4, 8, 8, 4, 8, 8, 4, 8,
+    4, 8, 4, 8, 4, 8, 4, 8,
+    8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 8, 8, 8, 8, 8
+};
+
+const Music mario_music = {
+    .notes = mario_notes,
+    .durations = mario_durations,
+    .num_notes = sizeof(mario_notes) / sizeof(mario_notes[0]),
+    .tempo = 120 // BPM do Mario
 };
 
 // Música do Zelda
 const uint zelda_notes[] = {
-    NOTE_G4, NOTE_C5, NOTE_E5, NOTE_G5, NOTE_C6, NOTE_E6, NOTE_G6, NOTE_E6,
-    NOTE_G6, NOTE_E6, NOTE_G6, NOTE_E6, NOTE_G6, NOTE_E6, NOTE_G6, NOTE_E6
+    // NOTE_A4, NOTE_D5, NOTE_F5, NOTE_A5, NOTE_D6, NOTE_F6, NOTE_A6, NOTE_F6,
+    // NOTE_A6, NOTE_F6, NOTE_A6, NOTE_F6, NOTE_A6, NOTE_F6, NOTE_A6, NOTE_F6,
+    // NOTE_AS4, NOTE_F4, NOTE_F4, NOTE_AS4, NOTE_GS4, NOTE_FS4, NOTE_GS4,
+    // NOTE_AS4, NOTE_FS4, NOTE_FS4, NOTE_AS4, NOTE_A4, NOTE_G4, NOTE_A4,
+    // REST,
+    NOTE_AS4, NOTE_F4, NOTE_AS4, NOTE_AS4, NOTE_C5, NOTE_D5, NOTE_DS5,
+    NOTE_F5, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_FS5, NOTE_GS5,
+    NOTE_AS5, NOTE_AS5, NOTE_AS5, NOTE_GS5, NOTE_FS5,
+    NOTE_GS5, NOTE_FS5, NOTE_F5,
+    NOTE_DS5, NOTE_F5, NOTE_FS5, NOTE_F5, NOTE_DS5,
+    NOTE_CS5, NOTE_DS5, NOTE_F5, NOTE_DS5, NOTE_CS5,
+    NOTE_C5, NOTE_D5, NOTE_E5, NOTE_G5,
+    NOTE_F5, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4,
+    NOTE_AS4, NOTE_F4, NOTE_AS4, NOTE_AS4, NOTE_C5, NOTE_D5, NOTE_DS5,
+    NOTE_F5, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_FS5, NOTE_GS5,
+    NOTE_AS5, NOTE_CS6,
+    NOTE_C6, NOTE_A5, NOTE_F5,
+    NOTE_FS5, NOTE_AS5,
+    NOTE_A5, NOTE_F5,
+    NOTE_FS5, NOTE_AS5,
+    NOTE_A5, NOTE_F5, NOTE_D5,
+    NOTE_DS5, NOTE_FS5,
+    NOTE_F5, NOTE_CS5, NOTE_AS4,
+    NOTE_C5, NOTE_D5, NOTE_E5, NOTE_G5,
+    NOTE_F5, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4
 };
 
 const uint zelda_durations[] = {
-    400, 400, 400, 400, 400, 400, 400, 400,
-    400, 400, 400, 400, 400, 400, 400, 400
+    // 4, 4, 4, 4, 4, 4, 4, 4,
+    // 4, 4, 4, 4, 4, 4, 4, 4,
+    // -2, 8, 8, 8, 16, 16, -2,
+    // -2, 8, 8, 8, 16, 16, -2,
+    // 1,
+    4, -4, 8, 16, 16, 16, 16,
+    2, 8, 8, 8, 16, 16,
+    -2, 8, 8, 8, 16,
+    -8, 16, 2, 4,
+    -8, 16, 2, 8, 8,
+    -8, 16, 2, 8, 8,
+    -8, 16, 2, 8,
+    16, 16, 16, 16, 16, 16, 16, 16, 8, 16, 8,
+    4, -4, 8, 16, 16, 16, 16,
+    2, 8, 8, 8, 16, 16,
+    -2, 4,
+    4, 2, 4,
+    -2, 4,
+    4, 2, 4,
+    -2, 4,
+    4, 2, 4,
+    -2, 4,
+    4, 2, 4,
+    -8, 16, 2, 8,
+    16, 16, 16, 16, 16, 16, 16, 16, 8, 16, 8
+};
+
+const Music zelda_music = {
+    .notes = zelda_notes,
+    .durations = zelda_durations,
+    .num_notes = sizeof(zelda_notes) / sizeof(zelda_notes[0]),
+    .tempo = 88 // BPM do Zelda
 };
 
 // Música do Harry Potter
@@ -135,13 +203,20 @@ const uint harry_notes[] = {
 };
 
 const uint harry_durations[] = {
-    400, 400, 400, 400, 400, 400, 400, 400,
-    400, 400, 400, 400, 400, 400, 400, 400,
-    400, 400, 400, 400, 400, 400, 400, 400,
-    400, 400, 400, 400, 400, 400, 400, 400
+    4, 4, 4, 4, 4, 4, 4, 4,
+    4, 4, 4, 4, 4, 4, 4, 4,
+    4, 4, 4, 4, 4, 4, 4, 4,
+    4, 4, 4, 4, 4, 4, 4, 4
 };
 
-// Música do Sonic (Green Hill Zone)
+const Music harry_music = {
+    .notes = harry_notes,
+    .durations = harry_durations,
+    .num_notes = sizeof(harry_notes) / sizeof(harry_notes[0]),
+    .tempo = 144 // BPM do Harry Potter
+};
+
+// Música do Sonic
 const uint sonic_notes[] = {
     REST, NOTE_D5, NOTE_B4, NOTE_D5, NOTE_CS5, NOTE_D5, NOTE_CS5, NOTE_A4,
     REST, NOTE_A4, NOTE_FS5, NOTE_E5, NOTE_D5, NOTE_CS5, NOTE_D5, NOTE_CS5, NOTE_A4,
@@ -156,22 +231,76 @@ const uint sonic_notes[] = {
 };
 
 const uint sonic_durations[] = {
-    200, 200, 400, 200, 400, 200, 400, 200,
-    200, 200, 200, 400, 200, 400, 200, 400, 200,
-    200, 200, 400, 200, 400, 200, 400, 200,
-    200, 200, 200, 400, 200, 400, 200, 400, 200,
-    200, 200, 400, 200, 400, 200, 400, 200,
-    200, 200, 200, 400, 200, 400, 200, 400, 200,
-    200, 200, 400, 200, 400, 200, 400, 200,
-    200, 200, 200, 400, 200, 400, 200, 400, 200, 200, 200,
-    400, 200, 200, 200, 400, 200, 200, 200, 200, 400,
-    200, 200, 200, 400
+    8, 8, 4, 8, 4, 8, 4, 8,
+    8, 8, 8, 4, 8, 4, 8, 4, 8,
+    8, 8, 4, 8, 4, 8, 4, 8,
+    8, 8, 8, 4, 8, 4, 8, 4, 8,
+    8, 8, 4, 8, 4, 8, 4, 8,
+    8, 8, 8, 4, 8, 4, 8, 4, 8,
+    8, 8, 4, 8, 4, 8, 4, 8,
+    8, 8, 8, 4, 8, 4, 8, 4, 8, 8, 8,
+    4, 8, 8, 8, 4, 8, 8, 8, 8, 4,
+    8, 8, 8, 4
 };
 
-// Função para tocar uma música
-void play_music(const uint* notes, const uint* durations, size_t num_notes);
+const Music sonic_music = {
+    .notes = sonic_notes,
+    .durations = sonic_durations,
+    .num_notes = sizeof(sonic_notes) / sizeof(sonic_notes[0]),
+    .tempo = 90 // BPM do Sonic
+};
 
-// Função para tocar um som com frequência e duração específicas
+// Música do Game of Thrones
+const uint got_notes[] = {
+    NOTE_AS4, NOTE_F4, NOTE_F4, NOTE_AS4,
+NOTE_GS4, NOTE_FS4, NOTE_GS4,
+NOTE_AS4, NOTE_FS4, NOTE_FS4, NOTE_AS4,
+NOTE_A4, NOTE_G4, NOTE_A4,
+REST,
+
+NOTE_AS4, NOTE_F4, NOTE_AS4, NOTE_AS4, NOTE_C5, NOTE_D5, NOTE_DS5,
+NOTE_F5, NOTE_F5, NOTE_F5, NOTE_F5, NOTE_FS5, NOTE_GS5,
+NOTE_AS5, NOTE_AS5, NOTE_AS5, NOTE_GS5, NOTE_FS5,
+NOTE_GS5, NOTE_FS5, NOTE_F5, NOTE_F5
+};
+
+const uint got_durations[] = {
+    -2, 8, 8, 8,
+16, 16, -2,
+-2, 8, 8, 8,
+16, 16, -2,
+1,
+
+4, -4, 8, 16, 16, 16, 16,
+2, 8, 8, 8, 16, 16,
+-2, 8, 8, 8, 16,
+-8, 16, 2, 4
+};
+
+const Music got_music = {
+    .notes = got_notes,
+    .durations = got_durations,
+    .num_notes = sizeof(got_notes) / sizeof(got_notes[0]),
+    .tempo = 85 // BPM do Game of Thrones
+};
+
+// Música do Undertale
+const uint undertale_notes[] = {
+   NOTE_D3, NOTE_D3, NOTE_D4, NOTE_A3, 0, NOTE_GS3, NOTE_G3, NOTE_F3, NOTE_D3, NOTE_F3, NOTE_G3, NOTE_C3, NOTE_C3, NOTE_D4, NOTE_A3, 0, NOTE_GS3, NOTE_G3, NOTE_F3, NOTE_D3, NOTE_F3, NOTE_G3, NOTE_B2, NOTE_B2, NOTE_D4, NOTE_A3, 0, NOTE_GS3, NOTE_G3, NOTE_F3, NOTE_D3, NOTE_F3, NOTE_G3, NOTE_AS2, NOTE_AS2, NOTE_D4, NOTE_A3, 0, NOTE_GS3, NOTE_G3, NOTE_F3, NOTE_D3, NOTE_F3, NOTE_G3, NOTE_D3, NOTE_D3, NOTE_D4, NOTE_A3, 0, NOTE_GS3, NOTE_G3, NOTE_F3, NOTE_D3, NOTE_F3, NOTE_G3, NOTE_C3, NOTE_C3, NOTE_D4, NOTE_A3, 0, NOTE_GS3, NOTE_G3, NOTE_F3, NOTE_D3, NOTE_F3, NOTE_G3, NOTE_B2, NOTE_B2, NOTE_D4, NOTE_A3, 0, NOTE_GS3, NOTE_G3, NOTE_F3, NOTE_D3, NOTE_F3, NOTE_G3, NOTE_AS2, NOTE_AS2, NOTE_D4, NOTE_A3, 0, NOTE_GS3, NOTE_G3, NOTE_F3, NOTE_D3, NOTE_F3, NOTE_G3, NOTE_D4, NOTE_D4, NOTE_D5, NOTE_A4, 0, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_C4, NOTE_D5, NOTE_A4, 0, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, NOTE_B3, NOTE_B3, NOTE_D5, NOTE_A4, 0, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, NOTE_AS3, NOTE_AS3, NOTE_D5, NOTE_A4, 0, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, NOTE_D4, NOTE_D4, NOTE_D5, NOTE_A4, 0, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, NOTE_C4, NOTE_C4, NOTE_D5, NOTE_A4, 0, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, NOTE_B3, NOTE_B3, NOTE_D5, NOTE_A4, 0, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, NOTE_AS3, NOTE_AS3, NOTE_D5, NOTE_A4, 0, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_D4, NOTE_D4, NOTE_D4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_G4, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, 0, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_G4, NOTE_GS4, NOTE_A4, NOTE_C5, NOTE_A4, NOTE_D5, NOTE_D5, NOTE_D5, NOTE_A4, NOTE_D5, NOTE_C5, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_D4, NOTE_D4, NOTE_D4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_E4, NOTE_D4, NOTE_C4, 0, NOTE_G4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_D4, NOTE_D4, NOTE_F3, NOTE_G3, NOTE_AS3, NOTE_C4, NOTE_D4, NOTE_F4, NOTE_C5, 0, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_GS4, NOTE_A4, NOTE_C5, NOTE_A4, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_A4, NOTE_C5, NOTE_CS5, NOTE_GS4, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_G4, NOTE_F3, NOTE_G3, NOTE_A3, NOTE_F4, NOTE_E4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_E4, NOTE_A4, NOTE_A4, NOTE_G4, NOTE_F4, NOTE_DS4, NOTE_CS4, NOTE_DS4, 0, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_G4, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_F4, NOTE_F4, NOTE_F4, NOTE_GS4, NOTE_A4, NOTE_C5, NOTE_A4, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_A4, NOTE_C5, NOTE_CS5, NOTE_GS4, NOTE_GS4, NOTE_G4, NOTE_F4, NOTE_G4, NOTE_F3, NOTE_G3, NOTE_A3, NOTE_F4, NOTE_E4, NOTE_D4, NOTE_E4, NOTE_F4, NOTE_G4, NOTE_E4, NOTE_A4, NOTE_A4, NOTE_G4, NOTE_F4, NOTE_DS4, NOTE_CS4, NOTE_DS4
+};
+
+const uint undertale_durations[] = {
+    16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 16, 16, 8, 6, 32, 8, 8, 8, 16, 16, 16, 8, 16, 8, 8, 8, 8, 4, 16, 8, 16, 8, 8, 8, 16, 16, 16, 16, 16, 8, 8, 16, 8, 8, 8, 8, 8, 8, 8, 8, 16, 16, 16, 2, 8, 16, 8, 8, 8, 8, 4, 16, 8, 16, 8, 8, 8, 8, 8, 16, 8, 16, 8, 8, 8, 8, 8, 8, 8, 16, 8, 15, 8, 8, 2, 3, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 8, 2, 16, 8, 16, 8, 16, 16, 16, 16, 16, 16, 8, 8, 8, 8,  8, 8, 16, 16, 16, 2, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 2, 8, 8, 8, 8, 2, 2, 3, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 8, 2, 16, 8, 16, 8, 16, 16, 16, 16, 16, 16, 8, 8, 8, 8,  8, 8, 16, 16, 16, 2, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4, 2, 8, 8, 8, 8, 2, 1
+};
+
+const Music undertale_music = {
+    .notes = undertale_notes,
+    .durations = undertale_durations,
+    .num_notes = sizeof(undertale_notes) / sizeof(undertale_notes[0]),
+    .tempo = 120 // BPM 
+};
+// Funções
+void play_music(const Music *music);
 void play_sound(uint frequency, uint duration_ms);
 
 #endif // BUZZER_H

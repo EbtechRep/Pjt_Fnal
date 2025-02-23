@@ -1,9 +1,5 @@
 #ifndef ANIMATION
 #define ANIMATION
-
-
-
-
 #include <stdint.h>
 
 const uint8_t mario[] =  {
