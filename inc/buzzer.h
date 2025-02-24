@@ -99,13 +99,24 @@
 #define NOTE_DS8 4978
 //----------------------------------------------------------------------------------------------------------------
 // Definição da estrutura para uma música
-typedef struct
-{
-    const uint *notes;     // Array de notas
-    const uint *durations; // Array de durações
-    size_t num_notes;      // Número de notas
-    int tempo;             // Tempo da música (BPM)
+// Estrutura para uma música
+typedef struct {
+    const uint *notes;
+    const uint *durations;
+    size_t num_notes;
+    int tempo;
 } Music;
+
+// Definição das músicas
+extern const Music mario_music;
+extern const Music zelda_music;
+extern const Music harry_music;
+extern const Music sonic_music;
+extern const Music got_music;
+extern const Music undertale_music;
+extern const Music pirates_music;
+extern const Music tetris_music;
+extern const Music yakuza_music;
 //-------------------------------------------------------------------------------------------------------------------
 // Música do Mario
 const uint mario_notes[] = {
@@ -262,7 +273,7 @@ const Music mario_music = {
     .notes = mario_notes,
     .durations = mario_durations,
     .num_notes = sizeof(mario_notes) / sizeof(mario_notes[0]),
-    .tempo = 144 // BPM do Mario
+    .tempo = 124 // BPM do Mario
 };
 
 // Música do Zelda (notas mais graves)
@@ -337,7 +348,7 @@ const Music sonic_music = {
     .notes = sonic_notes,
     .durations = sonic_durations,
     .num_notes = sizeof(sonic_notes) / sizeof(sonic_notes[0]),
-    .tempo = 140 // BPM do Sonic
+    .tempo = 124 // BPM do Sonic
 };
 
 // Música do Game of Thrones
@@ -635,7 +646,7 @@ const Music tetris_music = {
     .notes = tetris_notes,
     .durations = tetris_durations,
     .num_notes = sizeof(tetris_notes) / sizeof(tetris_notes[0]),
-    .tempo = 144 // BPM
+    .tempo = 135 // BPM
 };
 
 

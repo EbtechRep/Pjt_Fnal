@@ -9,10 +9,7 @@
 #include "inc/animation.h"
 #include "inc/buzzer.h"
 
-
-volatile uint8_t display_state_a = 0; // Estado para o botão A
-volatile uint8_t display_state_b = 0; // Estado para o botão B
-
+// Definição dos pinos
 const uint I2C_SDA = 14;
 const uint I2C_SCL = 15;
 const uint BUTTON_A_PIN = 5; // Botão A no GPIO 5
@@ -23,7 +20,53 @@ const uint BUZZER_PIN = 10;
 volatile bool music_playing = false;
 volatile bool change_display = false;
 volatile bool button_pressed = false;
-volatile uint8_t display_state = 0; // Estado para alternar entre displays no mesmo botão
+
+// Estrutura para armazenar imagens e músicas
+typedef struct {
+    const uint8_t *image;
+    const Music *music;
+} DisplayState;
+
+// Estados para o botão A (jogos)
+DisplayState states_a[] = {
+    {mario, &mario_music},
+    {tetris, &tetris_music},
+    {zelda, &zelda_music},
+    {undertale, &undertale_music},
+    {sonic, &sonic_music},
+    {yakuza, &yakuza_music}
+};
+
+// Estados para o botão B (filmes/séries)
+DisplayState states_b[] = {
+    {harry, &harry_music},
+    {pirates, &pirates_music},
+    {got, &got_music}
+};
+
+uint8_t display_state_a = 0; // Estado atual para o botão A
+uint8_t display_state_b = 0; // Estado atual para o botão B
+
+// Função de debouncing para os botões
+bool debounce(uint gpio) {
+    static uint32_t last_time = 0;
+    uint32_t now = to_ms_since_boot(get_absolute_time());
+    if (now - last_time < 200) { // 200ms de debounce
+        return false;
+    }
+    last_time = now;
+    return true;
+}
+
+// Função de interrupção para os botões
+void button_callback(uint gpio, uint32_t events) {
+    if (debounce(gpio)) {
+        button_pressed = true;
+        if (music_playing) {
+            change_display = true; // Interrompe a música atual
+        }
+    }
+}
 
 // Função para tocar uma música
 void play_music(const Music *music) {
@@ -71,16 +114,6 @@ void play_sound(uint frequency, uint duration_ms) {
     pwm_set_enabled(slice, false);
 }
 
-// Função de interrupção para os botões
-void button_callback(uint gpio, uint32_t events) {
-    if (gpio == BUTTON_A_PIN || gpio == BUTTON_B_PIN) {
-        button_pressed = true;
-        if (music_playing) {
-            change_display = true; // Interrompe a música atual
-        }
-    }
-}
-
 int main() {
     stdio_init_all(); // Inicializa os tipos stdio padrão presentes ligados ao binário
 
@@ -121,6 +154,7 @@ int main() {
     memset(ssd, 0, ssd1306_buffer_length);
     render_on_display(ssd, &frame_area);
 
+    // Mensagem inicial
     char *text[] = {
         " Embarcatech,   ",
         "     ",
@@ -139,57 +173,25 @@ int main() {
     while (true) {
         if (button_pressed) {
             button_pressed = false; // Reseta o flag do botão
-    
+
             if (gpio_get(BUTTON_A_PIN) == 0) {
                 ssd1306_t ssd_bm;
                 ssd1306_init_bm(&ssd_bm, 128, 64, false, 0x3C, i2c1);
                 ssd1306_config(&ssd_bm);
-    
+
                 // Alterna entre os displays ao pressionar o botão A
-                if (display_state_a == 0) {
-                    ssd1306_draw_bitmap(&ssd_bm, mario);
-                    play_music(&mario_music);  // Toca a música do Mario
-                    display_state_a = 1; // Próximo estado
-                } else if (display_state_a == 1) {
-                    ssd1306_draw_bitmap(&ssd_bm, tetris);
-                    play_music(&tetris_music);  // Toca a música do tetris
-                    display_state_a = 3; // Próximo estado
-                } else if (display_state_a == 3) {
-                    ssd1306_draw_bitmap(&ssd_bm, zelda);
-                    play_music(&zelda_music);  // Toca a música do Zelda
-                    display_state_a = 4; // Próximo estado
-                } else if (display_state_a == 4) {
-                    ssd1306_draw_bitmap(&ssd_bm, undertale);
-                    play_music(&undertale_music);  // Toca a música do Undertale
-                    display_state_a = 5; // Próximo estado
-                } else if (display_state_a ==5){
-                    ssd1306_draw_bitmap(&ssd_bm, sonic);
-                    play_music(&sonic_music);  // Toca a música do Sonic
-                    display_state_a = 6; // Volta ao estado inicial
-                } else {
-                    ssd1306_draw_bitmap(&ssd_bm, yakuza);
-                    play_music(&yakuza_music);  // Toca a música do yakuza
-                    display_state_a = 0; // Volta ao estado inicial
-                }
+                ssd1306_draw_bitmap(&ssd_bm, states_a[display_state_a].image);
+                play_music(states_a[display_state_a].music);
+                display_state_a = (display_state_a + 1) % (sizeof(states_a) / sizeof(states_a[0]));
             } else if (gpio_get(BUTTON_B_PIN) == 0) {
                 ssd1306_t ssd_bm;
                 ssd1306_init_bm(&ssd_bm, 128, 64, false, 0x3C, i2c1);
                 ssd1306_config(&ssd_bm);
-    
+
                 // Alterna entre Series e Animes
-                if (display_state_b == 0) {
-                    ssd1306_draw_bitmap(&ssd_bm, harry);
-                    play_music(&harry_music);  // Toca a música do Harry Potter
-                    display_state_b = 1; // Próximo estado
-                } else if (display_state_b == 1) {
-                    ssd1306_draw_bitmap(&ssd_bm, pirates);
-                    play_music(&pirates_music);  // Toca a música do pirates
-                    display_state_b = 2; // Próximo estado
-                } else {
-                    ssd1306_draw_bitmap(&ssd_bm, got);
-                    play_music(&got_music);  // Toca a música do Game of Thrones
-                    display_state_b = 0; // Volta ao estado inicial
-                }
+                ssd1306_draw_bitmap(&ssd_bm, states_b[display_state_b].image);
+                play_music(states_b[display_state_b].music);
+                display_state_b = (display_state_b + 1) % (sizeof(states_b) / sizeof(states_b[0]));
             }
         }
     }
