@@ -122,10 +122,11 @@ int main() {
     render_on_display(ssd, &frame_area);
 
     char *text[] = {
-        "  Embarcatech,   ",
-        "  Projeto Final    ",
-        "  Bruno Flores   ",
-        "  tic370100483  ",
+        " Embarcatech,   ",
+        "     ",
+        " Projeto Final    ",
+        "     ",
+        " Bruno Flores  ",
     };
 
     int y = 0;
@@ -161,9 +162,13 @@ int main() {
                     ssd1306_draw_bitmap(&ssd_bm, undertale);
                     play_music(&undertale_music);  // Toca a música do Undertale
                     display_state_a = 5; // Próximo estado
-                } else {
+                } else if (display_state_a ==5){
                     ssd1306_draw_bitmap(&ssd_bm, sonic);
                     play_music(&sonic_music);  // Toca a música do Sonic
+                    display_state_a = 6; // Volta ao estado inicial
+                } else {
+                    ssd1306_draw_bitmap(&ssd_bm, yakuza);
+                    play_music(&yakuza_music);  // Toca a música do yakuza
                     display_state_a = 0; // Volta ao estado inicial
                 }
             } else if (gpio_get(BUTTON_B_PIN) == 0) {
