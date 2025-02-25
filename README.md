@@ -133,9 +133,7 @@ Para que os comandos **Ninja**, **CMake** e **Python** sejam reconhecidos em qua
    ```bash
    ninja
    ```   
-## 💻 Video demonstrativo: 
-**https://www.youtube.com/watch?v=XrZNPsri2dw**
- 
+
 
 
 
