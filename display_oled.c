@@ -34,7 +34,8 @@ DisplayState states_a[] = {
     {zelda, &zelda_music},
     {undertale, &undertale_music},
     {sonic, &sonic_music},
-    {yakuza, &yakuza_music}
+    {yakuza, &yakuza_music},
+    {zelda_storm, &zelda_storm_music}
 };
 
 // Estados para o botão B (filmes/séries)
@@ -188,7 +189,7 @@ int main() {
                 ssd1306_init_bm(&ssd_bm, 128, 64, false, 0x3C, i2c1);
                 ssd1306_config(&ssd_bm);
 
-                // Alterna entre Series e Animes
+                // Alterna entre Series e Filmes
                 ssd1306_draw_bitmap(&ssd_bm, states_b[display_state_b].image);
                 play_music(states_b[display_state_b].music);
                 display_state_b = (display_state_b + 1) % (sizeof(states_b) / sizeof(states_b[0]));

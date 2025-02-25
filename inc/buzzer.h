@@ -273,7 +273,7 @@ const Music mario_music = {
     .notes = mario_notes,
     .durations = mario_durations,
     .num_notes = sizeof(mario_notes) / sizeof(mario_notes[0]),
-    .tempo = 124 // BPM do Mario
+    .tempo = 120 // BPM do Mario
 };
 
 // Música do Zelda (notas mais graves)
@@ -646,7 +646,7 @@ const Music tetris_music = {
     .notes = tetris_notes,
     .durations = tetris_durations,
     .num_notes = sizeof(tetris_notes) / sizeof(tetris_notes[0]),
-    .tempo = 135 // BPM
+    .tempo = 108 // BPM
 };
 
 
@@ -664,6 +664,59 @@ const Music yakuza_music = {
     .durations = yakuza_durations,
     .num_notes = sizeof(yakuza_notes) / sizeof(yakuza_notes[0]),
     .tempo = 120 // BPM
+};
+
+
+// Música do zelda song of storm 
+const uint zelda_storm_notes [] ={
+    REST, NOTE_E4, NOTE_B4,  
+NOTE_D4, NOTE_F4, NOTE_D5,  
+
+NOTE_D4, NOTE_F4, NOTE_D5,  
+NOTE_E5, NOTE_F5, NOTE_E5, NOTE_E5,  
+NOTE_E5, NOTE_C5, NOTE_A4,  
+NOTE_A4, NOTE_D4, NOTE_F4, NOTE_G4,  
+NOTE_A4,  
+NOTE_A4, NOTE_D4, NOTE_F4, NOTE_G4,  
+NOTE_E4,  
+NOTE_D4, NOTE_F4, NOTE_D5,  
+NOTE_D4, NOTE_F4, NOTE_D5,  
+
+NOTE_E5, NOTE_F5, NOTE_E5, NOTE_E5,  
+NOTE_E5, NOTE_C5, NOTE_A4,  
+NOTE_A4, NOTE_D4, NOTE_F4, NOTE_G4,  
+NOTE_A4, NOTE_A4,  
+NOTE_D4
+
+};
+
+const uint zelda_storm_durations[] = {
+    8, 8, 2,  
+8, 8, 2,  
+
+8, 8, 2,  
+-4, 8, 8, 8,  
+8, 8, 2,  
+4, 4, 8, 8,  
+-2,  
+4, 4, 8, 8,  
+-2,  
+8, 8, 2,  
+8, 8, 2,  
+
+-4, 8, 8, 8,  
+8, 8, 2,  
+4, 4, 8, 8,  
+2, 4,  
+1
+
+};
+
+const Music zelda_storm_music = {
+    .notes = zelda_storm_notes,
+    .durations = zelda_storm_durations,
+    .num_notes = sizeof(zelda_storm_notes) / sizeof(zelda_storm_notes[0]),
+    .tempo = 108 // BPM
 };
 
 
